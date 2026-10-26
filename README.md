@@ -95,3 +95,45 @@ Mudanças devem ser feitas em branches separadas e acompanhadas de testes sempre
 ## Aviso
 
 Este projeto tem finalidade educacional e informativa. Simulações não constituem recomendação de investimento nem substituem uma avaliação financeira individual.
+
+
+## API de cálculos de juros
+
+A API disponibiliza endpoints para simular juros simples e compostos. Inicie a aplicação com `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`).
+
+### Juros simples
+
+`POST /api/calculations/simple`
+
+### Juros compostos
+
+`POST /api/calculations/compound`
+
+Ambos recebem JSON com capital inicial (`principal`), taxa percentual por período (`ratePercent`) e quantidade de períodos (`periods`). Por exemplo, `ratePercent: 2` significa 2% por período.
+
+Exemplo de requisição:
+
+```json
+{
+  "principal": 1000.00,
+  "ratePercent": 2,
+  "periods": 3
+}
+```
+
+Exemplo de resposta para juros simples:
+
+```json
+{
+  "type": "SIMPLE",
+  "principal": 1000.00,
+  "ratePercent": 2,
+  "periods": 3,
+  "interestAmount": 60.00,
+  "finalAmount": 1060.00
+}
+```
+
+A resposta de juros compostos usa `"type": "COMPOUND"` e aplica capitalização por período. Os valores monetários são calculados com `BigDecimal` e arredondados para duas casas decimais.
+
+Entradas ausentes, negativas ou fora dos limites documentados retornam HTTP 400 com um objeto `ApiError`, incluindo timestamp, status, mensagem e caminho da requisição. O número de períodos deve estar entre 0 e 10000; o capital inicial aceita até 15 dígitos inteiros e 2 decimais, e a taxa até 6 dígitos inteiros e 4 decimais.
