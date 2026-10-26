@@ -25,7 +25,8 @@ public record InterestCalculationRequest(
         @Digits(integer = 6, fraction = 4, message = "A taxa deve ter até 6 dígitos inteiros e 4 decimais.")
         BigDecimal ratePercent,
 
+        @NotNull(message = "O número de períodos é obrigatório.")
         @Min(value = 0, message = "O número de períodos não pode ser negativo.")
         @Max(value = 10000, message = "O número de períodos não pode exceder 10000.")
-        int periods) {
+        Integer periods) {
 }
