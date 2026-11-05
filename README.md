@@ -67,15 +67,24 @@ Linux ou macOS:
 ./mvnw test
 ```
 
+## API REST
+
+A aplicação disponibiliza os seguintes endpoints para simulação de juros:
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `POST` | `/api/calculations/simple` | Calcula juros simples. |
+| `POST` | `/api/calculations/compound` | Calcula juros compostos. |
+
+As rotas recebem os dados da simulação em JSON e retornam informações como valor principal, taxa, períodos, juros acumulados e montante final. As entradas são validadas e os erros seguem uma estrutura padronizada.
+
+> Consulte os DTOs e os testes da aplicação para conferir o contrato JSON atualizado de cada endpoint.
+
 ## Roadmap
 
-- [ ] Definir e documentar os contratos dos endpoints REST.
-- [ ] Implementar e testar juros simples e compostos.
-- [ ] Validar taxas, valores monetários e períodos de entrada.
 - [ ] Integrar séries temporais do Banco Central com tratamento de falhas externas.
-- [ ] Adicionar testes de unidade e de integração.
-- [ ] Documentar exemplos de requisição e resposta da API.
-- [ ] Adicionar pipeline de CI para executar os testes em pull requests.
+- [ ] Documentar exemplos completos de requisição e resposta da API.
+- [ ] Adicionar testes de integração para fontes externas.
 
 ## Princípios do projeto
 
