@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calc Juros</title>
+<meta name="description" content="Calculadora de juros simples e compostos com taxas atuais do Banco Central: Selic, CDI, IPCA e poupança.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231d5fd1'/%3E%3Cpath d='M7 23 14 15l4 4 7-10' stroke='white' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrap brand">calc·juros</div>
+</header>
+<div class="wrap hero">
+  <h1>Juros simples ou compostos: quanto rende?</h1>
+  <p>Simule aportes mensais e compare sua taxa com Selic, CDI, IPCA e poupança, direto da API do Banco Central.</p>
+</div>
+
+<main class="wrap">
+  <form id="calc" class="panel" novalidate aria-label="Parâmetros da simulação">
+    <h2>Simulação</h2>
+    <fieldset>
+      <legend>Regime exibido</legend>
+      <div class="seg">
+        <label><input type="radio" name="mode" value="compound" checked><span>Compostos</span></label>
+        <label><input type="radio" name="mode" value="simple"><span>Simples</span></label>
+      </div>
+    </fieldset>
+    <div class="field"><label for="capital">Capital inicial (R$)</label>
+      <input id="capital" type="number" inputmode="decimal" min="0" step="any" value="10000" aria-describedby="capital-err"><div class="err" id="capital-err" role="alert"></div></div>
+    <div class="field"><label for="deposit">Aporte mensal (R$)</label>
+      <input id="deposit" type="number" inputmode="decimal" min="0" step="any" value="500" aria-describedby="deposit-err"><div class="err" id="deposit-err" role="alert"></div></div>
+    <div class="field"><label for="rate">Taxa (% ao ano)</label>
+      <input id="rate" type="number" inputmode="decimal" min="0" max="1000" step="any" value="12" aria-describedby="rate-err"><div class="err" id="rate-err" role="alert"></div></div>
+    <div class="field"><label for="months">Prazo (meses)</label>
+      <input id="months" type="number" inputmode="numeric" min="1" max="600" step="1" value="60" aria-describedby="months-err"><div class="err" id="months-err" role="alert"></div></div>
+  </form>
+
+  <div>
+    <section class="kpis" aria-live="polite" aria-label="Resultado">
+      <div class="kpi main"><small>Montante final</small><strong id="k-final">–</strong></div>
+      <div class="kpi"><small>Total investido</small><strong id="k-invested">–</strong></div>
+      <div class="kpi"><small>Juros ganhos</small><strong id="k-interest">–</strong></div>
+      <div class="kpi"><small>Compostos − simples</small><strong id="k-diff">–</strong></div>
+    </section>
+
+    <section class="panel">
+      <h2>Evolução do saldo</h2>
+      <div class="chart"><canvas id="line" role="img" aria-label="Evolução do saldo"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <h2>Quanto você teria em cada taxa</h2>
+      <p class="note">Mesmo capital, aporte e prazo, capitalizados mensalmente. Clique numa taxa do Banco Central para usá-la na simulação.</p>
+      <div id="rates" class="rates" aria-live="polite">Carregando taxas do Banco Central…</div>
+      <p id="stale" class="stale" hidden></p>
+      <div class="chart short"><canvas id="bars" role="img" aria-label="Montante final por taxa"></canvas></div>
+      <details><summary>Ver como tabela</summary>
+        <table><thead><tr><th>Taxa</th><th>% a.a.</th><th>Montante final</th></tr></thead><tbody id="table-body"></tbody></table>
+      </details>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap">Fonte: Banco Central do Brasil (SGS). Simulação ilustrativa, sem impostos nem taxas; não é recomendação de investimento.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
