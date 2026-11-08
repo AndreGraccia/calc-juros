@@ -1,6 +1,8 @@
 package io.github.andregraccia.calcjuros.indicator.integration.bcb;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,8 @@ import io.github.andregraccia.calcjuros.indicator.integration.bcb.dto.BcbSeriesP
 
 @Component
 public class BcbClient {
+
+    private static final DateTimeFormatter BCB_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final RestClient restClient;
 
@@ -20,10 +24,11 @@ public class BcbClient {
         this.restClient = builder.baseUrl(baseUrl).requestFactory(factory).build();
     }
 
-    /** Último ponto de uma série do SGS (ex.: 432 = Selic meta). */
-    public BcbSeriesPoint[] getLatest(int series) {
+    /** Pontos de uma série do SGS (ex.: 432 = Selic meta) desde a data, do mais antigo ao mais novo. */
+    public BcbSeriesPoint[] getSince(int series, LocalDate from) {
         return restClient.get()
-                .uri("/dados/serie/bcdata.sgs.{series}/dados/ultimos/1?formato=json", series)
+                .uri("/dados/serie/bcdata.sgs.{series}/dados?formato=json&dataInicial={from}",
+                        series, from.format(BCB_DATE))
                 .retrieve()
                 .body(BcbSeriesPoint[].class);
     }
